@@ -1,0 +1,2 @@
+import RequestForm from '../request-form';
+export default function Page(){return <main className="form-shell"><a href="/" className="back">← Find a mess</a><p className="eyebrow">STUDENT EARLY ACCESS</p><h1>Let’s find your everyday meal.</h1><p>Tell us your area, budget and preferences. We’re gathering interest while we confirm local providers. This does not reserve a meal, and response times are not guaranteed.</p><RequestForm/></main>}

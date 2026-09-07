@@ -1,0 +1,4 @@
+export const providers=[
+{id:'om-mess',name:'OM Mess',type:'Indian mess',description:'Lunch and dinner plans with vegetarian and non-vegetarian options, described on the provider’s website.',source:'https://www.omedu.com/best-indian-mess-tbilisi-students/',label:'Provider website',diet:'Vegetarian & non-vegetarian',initial:'OM'},
+{id:'indian-delight',name:'Indian Delight',type:'Restaurant & tiffin',description:'A Tbilisi restaurant advertising doorstep tiffin service for medical students.',source:'https://indiandelight.ge/',label:'Provider website',diet:'Contact for dietary options',initial:'ID'},
+{id:'eazy-meals',name:'Eazy Meals Tbilisi',type:'Indian meal delivery',description:'A public app listing describes homestyle Indian meal delivery. Current service and menus need confirmation.',source:'https://instagram.com/eazymeals.tbilisi',label:'Instagram',diet:'Contact for dietary options',initial:'EM'}];

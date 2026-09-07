@@ -1,0 +1,2 @@
+import RequestForm from '../request-form';
+export default function Page(){return <main className="form-shell"><a href="/" className="back">← Find a mess</a><p className="eyebrow">FOR LOCAL KITCHENS</p><h1>Bring your mess to MessMate.</h1><p>Share your plans and delivery areas. We’ll review your submission before discussing a listing or customer referrals. Submitting is free and does not create a paid agreement.</p><RequestForm kind="partner"/></main>}
