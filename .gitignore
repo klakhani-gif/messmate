@@ -38,3 +38,4 @@ next-env.d.ts
 /work/
 wrangler.local.json
 !.env.example
+*.tsbuildinfo
