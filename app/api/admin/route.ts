@@ -1,5 +1,17 @@
 import {isAdmin} from '../../admin-auth';
-import {database} from '../../../db/raw';
-export async function GET(){if(!await isAdmin())return Response.json({error:'Access denied'},{status:403});try{const data=await database().prepare('SELECT * FROM requests ORDER BY created_at DESC LIMIT 200').all();return Response.json(data.results,{headers:{'Cache-Control':'no-store'}})}catch{return Response.json({error:'Could not load enquiries'},{status:503})}}
-export async function PATCH(request:Request){if(request.headers.get('origin')!==new URL(request.url).origin||!await isAdmin())return Response.json({error:'Access denied'},{status:403});try{const data=await request.json() as {id:string,status:string};if(typeof data.id!=='string'||data.id.length>40||!['new','contacted','closed','delete'].includes(data.status))return Response.json({error:'Invalid update'},{status:400});if(data.status==='delete')await database().prepare('DELETE FROM requests WHERE id = ?').bind(data.id).run();else await database().prepare('UPDATE requests SET status = ? WHERE id = ?').bind(data.status,data.id).run();return Response.json({ok:true})}catch{return Response.json({error:'Update failed'},{status:503})}}
-
+import {backendConfig} from '../../../lib/runtime';
+import {rest} from '../../../lib/supabase';
+import {sameOrigin} from '../../../lib/validation';
+export async function GET(){
+  if(!await isAdmin())return Response.json({error:'Access denied'},{status:403});
+  try{const r=await rest(backendConfig(),'messmate_enquiries?select=*&order=created_at.desc&limit=200');if(!r.ok)throw new Error('Read failed');return Response.json(await r.json(),{headers:{'Cache-Control':'no-store'}})}catch{return Response.json({error:'Could not load enquiries'},{status:503})}
+}
+export async function PATCH(request:Request){
+  if(!sameOrigin(request)||!await isAdmin())return Response.json({error:'Access denied'},{status:403});
+  try{
+    const data=await request.json() as {id?:string,status?:string};
+    if(!data||typeof data.id!=='string'||!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(data.id)||!['new','contacted','closed','delete'].includes(data.status||''))return Response.json({error:'Invalid update'},{status:400});
+    const r=await rest(backendConfig(),'messmate_enquiries?id=eq.'+encodeURIComponent(data.id),data.status==='delete'?{method:'DELETE'}:{method:'PATCH',body:JSON.stringify({status:data.status})});
+    if(!r.ok)throw new Error('Update failed');return Response.json({ok:true},{headers:{'Cache-Control':'no-store'}});
+  }catch{return Response.json({error:'Update failed'},{status:503})}
+}

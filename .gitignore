@@ -39,3 +39,5 @@ next-env.d.ts
 wrangler.local.json
 !.env.example
 *.tsbuildinfo
+.dev.vars*
+!.dev.vars.example

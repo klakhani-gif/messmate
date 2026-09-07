@@ -1,3 +1,7 @@
-import {getChatGPTUser} from './chatgpt-auth';
-import {env} from 'cloudflare:workers';
-export async function isAdmin(){const user=await getChatGPTUser();const allowed=(env as unknown as {ADMIN_EMAIL?:string}).ADMIN_EMAIL;return Boolean(user&&allowed&&user.email.toLowerCase()===allowed.toLowerCase());}
+import { cookies } from 'next/headers';
+import { backendConfig } from '../lib/runtime';
+import { SESSION_COOKIE, verifyAdmin } from '../lib/supabase';
+export async function isAdmin(){
+  try {const token=(await cookies()).get(SESSION_COOKIE)?.value;return Boolean(token && await verifyAdmin(backendConfig(),token));}
+  catch {return false;}
+}

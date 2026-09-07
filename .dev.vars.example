@@ -1,0 +1,5 @@
+# Copy to .dev.vars for local development. Never commit populated credentials.
+SUPABASE_URL=
+SUPABASE_PUBLISHABLE_KEY=
+SUPABASE_SECRET_KEY=
+ADMIN_EMAIL=
